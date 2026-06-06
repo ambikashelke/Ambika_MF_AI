@@ -82,7 +82,7 @@ class MindMapErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
 const buildMindMapTree = (nodes: any[], edges: any[]): MindMapNode | null => {
   if (!nodes || nodes.length === 0) return null;
-  
+
   const nodeMap = new Map<string, MindMapNode>();
   nodes.forEach((n) => {
     nodeMap.set(n.id, {
@@ -195,7 +195,7 @@ const Dashboard = () => {
       // 1. Call POST /api/generate-plan
       const planUrl = `${apiBase}/api/generate-plan`;
       console.log(`Sending POST request to ${planUrl}`);
-      
+
       const planRes = await fetch(planUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -285,7 +285,7 @@ const Dashboard = () => {
 
     } catch (aiError: any) {
       console.warn("AI generation failed, falling back to current generator...", aiError);
-      
+
       // Show a friendly error toast informing the user about the fallback
       toast({
         title: "AI Service unavailable",
@@ -296,7 +296,7 @@ const Dashboard = () => {
       // Trigger current fallback generator sequence
       try {
         console.log("Running fallback generator sequence...");
-        
+
         // Fallback: 1. Generate Mind Map
         const mindmapRes = await fetch(`${apiBase}/api/generate-mindmap`, {
           method: "POST",
@@ -360,7 +360,7 @@ const Dashboard = () => {
             })
           );
           const savedTasks = await Promise.all(taskPromises);
-          
+
           setTasks((prev) => {
             const filtered = prev.filter((p) => !mappedTasks.some((mt) => mt.id === p.id));
             return [...savedTasks, ...filtered];
@@ -441,7 +441,7 @@ const Dashboard = () => {
 
   const removeTask = async (id: string) => {
     const prev = tasks;
-    
+
     // 1. Remove task from UI immediately
     setTasks((p) => p.filter((t) => t.id !== id));
 
@@ -525,16 +525,15 @@ const Dashboard = () => {
 
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 p-4 overflow-hidden">
         {/* Voice Panel */}
-        <div className="lg:col-span-3 gradient-card rounded-2xl border border-border/50 shadow-card p-6 flex flex-col">
+        <div className="lg:col-span-3 gradient-card rounded-2xl border border-border/50 shadow-card p-6 h-[650px] flex flex-col overflow-hidden">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
             <Mic className="w-5 h-5 text-primary" /> Voice Input
           </h2>
           <div className="flex-1 flex flex-col items-center justify-center gap-6">
             <button
               onClick={handleRecord}
-              className={`w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 ${
-                isRecording ? "bg-destructive animate-pulse-glow" : "gradient-primary glow-primary hover:scale-110"
-              }`}
+              className={`w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 ${isRecording ? "bg-destructive animate-pulse-glow" : "gradient-primary glow-primary hover:scale-110"
+                }`}
             >
               {isRecording ? <MicOff className="w-8 h-8 text-primary-foreground" /> : <Mic className="w-8 h-8 text-primary-foreground" />}
             </button>
@@ -579,7 +578,7 @@ const Dashboard = () => {
         </div>
 
         {/* Mind Map Panel */}
-        <div className="lg:col-span-5 gradient-card rounded-2xl border border-border/50 shadow-card p-6 overflow-auto flex flex-col">
+        <div className="lg:col-span-5 gradient-card rounded-2xl border border-border/50 shadow-card p-6 h-[650px] flex flex-col overflow-hidden">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
             <Brain className="w-5 h-5 text-secondary" /> Mind Map
           </h2>
@@ -602,7 +601,7 @@ const Dashboard = () => {
                 </div>
               )}
             >
-              <div className="space-y-2">
+              <div className="flex-1 overflow-y-auto pr-2">
                 <MindMapViz node={mindMap} />
               </div>
             </MindMapErrorBoundary>
@@ -614,7 +613,7 @@ const Dashboard = () => {
         </div>
 
         {/* Task Panel */}
-        <div className="lg:col-span-4 gradient-card rounded-2xl border border-border/50 shadow-card p-6 overflow-auto">
+        <div className="lg:col-span-4 gradient-card rounded-2xl border border-border/50 shadow-card p-6 h-[650px] flex flex-col overflow-hidden">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
             <Plus className="w-5 h-5 text-primary" /> Tasks
             {tasks.length > 0 && (
@@ -624,19 +623,17 @@ const Dashboard = () => {
             )}
           </h2>
           {tasks.length > 0 ? (
-            <ul className="space-y-2">
+            <ul className="flex-1 overflow-y-auto pr-2 space-y-2">
               {tasks.map((task) => (
                 <li
                   key={task.id}
-                  className={`group flex items-center gap-3 p-3 rounded-lg transition-all text-sm ${
-                    task.status === "done" ? "bg-primary/10 text-muted-foreground" : "bg-muted hover:bg-muted/80"
-                  }`}
+                  className={`group flex items-center gap-3 p-3 rounded-lg transition-all text-sm ${task.status === "done" ? "bg-primary/10 text-muted-foreground" : "bg-muted hover:bg-muted/80"
+                    }`}
                 >
                   <button
                     onClick={() => toggleTask(task)}
-                    className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${
-                      task.status === "done" ? "border-primary bg-primary" : "border-border"
-                    }`}
+                    className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${task.status === "done" ? "border-primary bg-primary" : "border-border"
+                      }`}
                   >
                     {task.status === "done" && <span className="text-primary-foreground text-xs">✓</span>}
                   </button>
